@@ -1,9 +1,17 @@
-package = "luafanmicro"
-version = "0.6-1"
+-- This file was automatically generated for the LuaDist project.
+
+package = "luafanlite"
+version = "0.7-1"
+-- LuaDist source
 source = {
-   url = "git://github.com/luafan/luafan",
-   tag = "v0.6"
+  tag = "0.7-1",
+  url = "git://github.com/LuaDist-testing/luafanlite.git"
 }
+-- Original source
+-- source = {
+--    url = "git://github.com/luafan/luafan",
+--    tag = "v0.7.0"
+-- }
 
 description = {
    summary = "A single process/thread library, with async apis for Lua.",
@@ -19,9 +27,15 @@ dependencies = {
 }
 
 external_dependencies = {
+   OPENSSL = {
+      header = "openssl/opensslv.h"
+   },
    LIBEVENT = {
       header = "event2/event.h"
    },
+   CURL = {
+      header = "curl/curl.h"
+   }
 }
 
 build = {
@@ -32,6 +46,8 @@ build = {
             "src/utlua.c",
             "src/bytearray.c",
             "src/event_mgr.c",
+            "src/hostcheck.c",
+            "src/openssl_hostname_validation.c",
             "src/luafan.c",
             "src/luafan_posix.c",
             "src/tcpd.c",
@@ -39,12 +55,13 @@ build = {
             "src/stream.c",
             "src/objectbuf.c",
             "src/fifo.c",
+            "src/http.c",
             "src/httpd.c",
          },
-         defines = { "FAN_HAS_OPENSSL=0", "FAN_HAS_LUAJIT=1" },
-         libraries = { "event" },
-         incdirs = { "$(LIBEVENT_INCDIR)" },
-         libdirs = { "$(LIBEVENT_LIBDIR)" }
+         defines = { "FAN_HAS_OPENSSL=1", "FAN_HAS_LUAJIT=1", "_GNU_SOURCE=1" },
+         libraries = { "event", "event_openssl", "ssl", "crypto", "curl", "resolv" },
+         incdirs = { "$(CURL_INCDIR)", "$(LIBEVENT_INCDIR)", "$(OPENSSL_INCDIR)" },
+         libdirs = { "$(CURL_LIBDIR)", "$(LIBEVENT_LIBDIR)", "$(OPENSSL_LIBDIR)" }
       },
       ["fan.connector.init"] = "modules/fan/connector/init.lua",
       ["fan.connector.tcp"] = "modules/fan/connector/tcp.lua",
@@ -60,7 +77,8 @@ build = {
       ["fan.objectbuf.init"] = "modules/fan/objectbuf/init.lua",
       ["fan.upnp"] = "modules/fan/upnp.lua",
       ["fan.utils"] = "modules/fan/utils.lua",
-      ["fan.http"] = "modules/fan/http.lua",
+      ["fan.http.init"] = "modules/fan/http/init.lua",
+      ["fan.http.http"] = "modules/fan/http/http.lua",
       ["config"] = "modules/config.lua",
       ["sqlite3.orm"] = "modules/sqlite3/orm.lua"
    }

@@ -1,8 +1,8 @@
 package = "luafan"
-version = "0.6-1"
+version = "0.7-1"
 source = {
    url = "git://github.com/luafan/luafan",
-   tag = "v0.6"
+   tag = "v0.7.0"
 }
 
 description = {
@@ -55,7 +55,7 @@ build = {
             "src/luasql.c",
             "src/luamariadb.c",
          },
-         defines = {"FAN_HAS_OPENSSL=1", "FAN_HAS_LUAJIT=1"},
+         defines = { "FAN_HAS_OPENSSL=1", "FAN_HAS_LUAJIT=1", "_GNU_SOURCE=1" },
          libraries = { "event", "event_openssl", "ssl", "crypto", "curl", "resolv", "mysqlclient" },
          incdirs = { "$(CURL_INCDIR)", "$(LIBEVENT_INCDIR)", "$(OPENSSL_INCDIR)", "$(MARIADB_INCDIR)" },
          libdirs = { "$(CURL_LIBDIR)", "$(LIBEVENT_LIBDIR)", "$(OPENSSL_LIBDIR)", "$(MARIADB_LIBDIR)" }
@@ -76,6 +76,8 @@ build = {
       ["fan.utils"] = "modules/fan/utils.lua",
       ["mariadb.orm"] = "modules/mariadb/orm.lua",
       ["mariadb.pool"] = "modules/mariadb/pool.lua",
+      ["fan.http.init"] = "modules/fan/http/init.lua",
+      ["fan.http.http"] = "modules/fan/http/http.lua",
       ["config"] = "modules/config.lua",
       ["sqlite3.orm"] = "modules/sqlite3/orm.lua"
    }
